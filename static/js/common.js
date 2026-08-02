@@ -1,4 +1,32 @@
-let id = document.getElementById("linkedin")
+let id = document.getElementById("linkedin");
+
+(function () {
+    const siteMoveNotice = document.querySelector(".site-move-notice");
+
+    if (!siteMoveNotice) {
+        return;
+    }
+
+    let updateQueued = false;
+
+    const updateSiteMoveNotice = function () {
+        const scrollPosition = window.scrollY || window.pageYOffset || 0;
+        siteMoveNotice.classList.toggle("site-move-notice--scrolled", scrollPosition > 8);
+        updateQueued = false;
+    };
+
+    const queueSiteMoveNoticeUpdate = function () {
+        if (!updateQueued) {
+            updateQueued = true;
+            window.requestAnimationFrame(updateSiteMoveNotice);
+        }
+    };
+
+    updateSiteMoveNotice();
+    window.addEventListener("scroll", queueSiteMoveNoticeUpdate, { passive: true });
+    window.addEventListener("pageshow", updateSiteMoveNotice);
+})();
+
 $(function () {
     $(id).on({
         mouseover: function () {
